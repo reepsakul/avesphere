@@ -7,3 +7,15 @@ services:
     ports:
       - '5173:5173'
     command: ash -c "npm i -g pnpm && pnpm i && pnpm run dev --host"
+  db:
+    image: postgres:17-alpine
+    restart: 'no'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: eiCugh5r
+    ports:
+      - '5432:5432'
+    volumes:
+      - pg:/var/lib/postgresql/data
+volumes:
+  pg:
