@@ -8,4 +8,4 @@ Bro wth am I even doing here :skull:
 
 ## Postgres or sum??
 
-`docker exec -it db psql -U admin`
+`docker exec -it db psql -U avesphere`

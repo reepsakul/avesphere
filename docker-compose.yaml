@@ -11,7 +11,7 @@ services:
     image: postgres:17-alpine
     restart: 'no'
     environment:
-      POSTGRES_USER: admin
+      POSTGRES_USER: avesphere
       POSTGRES_PASSWORD: eiCugh5r
     ports:
       - '5432:5432'
