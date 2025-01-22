@@ -7,12 +7,15 @@ services:
     ports:
       - '5173:5173'
     command: ash -c "npm i -g pnpm && pnpm i && pnpm run dev --host"
+
   db:
     image: postgres:17-alpine
     restart: 'no'
+    env_file:
+      - .env.local
     environment:
-      POSTGRES_USER: avesphere
-      POSTGRES_PASSWORD: eiCugh5r
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - '5432:5432'
     volumes:

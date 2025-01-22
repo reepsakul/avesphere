@@ -2,6 +2,10 @@
 
 Bro wth am I even doing here :skull:
 
+### env
+
+`cp .env.dist .env.local` and write a password or sth
+
 ### Docker or sum
 
 `docker compose up`
@@ -11,7 +15,7 @@ this creates two containers:
 - db where the... yeah you get it
   db is a named volume for reasons explained at the [bottom](#remove-docker-volumes)
 
-### Postgres or sum??
+### Postgres or sum
 
 `docker exec -it db psql -U avesphere`
 
