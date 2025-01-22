@@ -4,6 +4,8 @@ Bro wth am I even doing here :skull:
 
 ## Docker or sum
 
+`docker compose up`
+
 ## Postgres or sum??
 
-## FE although I think Docker will do that alr?? idk idk
+`docker exec -it db psql -U admin`
