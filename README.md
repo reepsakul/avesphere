@@ -23,7 +23,7 @@ this creates two containers:
 
 `docker compose down -v`
 
-`docker compose down` basically doesn't delete the named volumes
+`docker compose down` basically doesn't delete the explicitly named volumes
 this is intentional to not lose the db content (that's why only the db is named volume)
 this way we can mount several instances of that volume into different containers with content that is not in the image
 but yeah, if we wanna unmount completely with also deleting named volumes (only the db in our case) we have to use the `-v` flag effectively
