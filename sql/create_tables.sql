@@ -1,5 +1,5 @@
 CREATE TABLE end_user (
-    id SERIAL PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT UNIQUE NOT NULL,
     pw TEXT NOT NULL,
     email TEXT UNIQUE
@@ -7,32 +7,32 @@ CREATE TABLE end_user (
 
 SELECT * FROM end_user
 
-CREATE TABLE character (
-    id SERIAL PRIMARY KEY,
-    end_user_id INT REFERENCES end_user(id) ON DELETE CASCADE,
-    general_info_id INT REFERENCES general_info(id),
-    base_stats_id INT REFERENCES base_stats(id),
-    talents_id INT REFERENCES talents(id),
+CREATE TABLE character(
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    end_user_id BIGINT REFERENCES end_user (id) ON DELETE CASCADE,
+    general_info_id BIGINT REFERENCES general_info (id),
+    base_stats_id BIGINT REFERENCES base_stats (id),
+    talents_id BIGINT REFERENCES talents (id),
     AP_collected NUMERIC
 );
 
 CREATE TABLE campaign (
-    id SERIAL PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT NOT NULL,
     description TEXT,
-    gamemaster_id INT REFERENCES end_user(id)
+    gamemaster_id BIGINT REFERENCES end_user (id)
 );
 
 CREATE TABLE campaign_players (
-    campaign_id INT REFERENCES campaign(id) ON DELETE CASCADE,
-    end_user_id INT REFERENCES end_user(id) ON DELETE CASCADE,
-    character_id INT REFERENCES character(id),
-    role_id INT REFERENCES role(id) ,
+    campaign_id BIGINT REFERENCES campaign (id) ON DELETE CASCADE,
+    end_user_id BIGINT REFERENCES end_user (id) ON DELETE CASCADE,
+    character_id BIGINT REFERENCES character(id),
+    role_id BIGINT REFERENCES role (id),
     primary key (campaign_id, end_user_id)
 );
 
 CREATE TABLE general_info (
-    id SERIAL PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT NOT NULL,
     sex TEXT NOT NULL,
     race TEXT NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE general_info (
 );
 
 CREATE TABLE base_stats (
-    id SERIAL PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     MU NUMERIC,
     KL NUMERIC,
     "IN" NUMERIC,
@@ -66,8 +66,7 @@ CREATE TABLE base_stats (
 );
 
 CREATE TABLE talents (
-    id SERIAL PRIMARY KEY,
-    -- character_id INT REFERENCES character(id) ON DELETE CASCADE,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     fliegen NUMERIC,
     gaukeleien NUMERIC,
     faehrtenlesen NUMERIC,
@@ -130,34 +129,80 @@ CREATE TABLE talents (
 );
 
 CREATE TABLE general_skill (
-    id SERIAL PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT UNIQUE NOT NULL,
     rule TEXT,
     conditions TEXT,
-    price NUMERIC 
+    price NUMERIC
 );
 
 CREATE TABLE character_general_skill (
-    id SERIAL PRIMARY KEY,
-    character_id INT REFERENCES character(id) ON DELETE CASCADE,
-    skill_id INT REFERENCES general_skill(id) ON DELETE CASCADE
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    character_id BIGINT REFERENCES character(id) ON DELETE CASCADE,
+    skill_id BIGINT REFERENCES general_skill (id) ON DELETE CASCADE
 );
 
-CREATE TABLE fight_skill (
-    id SERIAL PRIMARY KEY,
+CREATE TABLE command_skill (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT UNIQUE NOT NULL,
     rule TEXT,
     conditions TEXT,
-    price NUMERIC 
+    fighting_techniques TEXT,
+    price NUMERIC
+);
+
+CREATE TABLE character_command_skill (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    character_id BIGINT REFERENCES character(id) ON DELETE CASCADE,
+    skill_id BIGINT REFERENCES command_skill (id) ON DELETE CASCADE
+);
+
+CREATE TABLE fight_skill (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL,
+    rule TEXT,
+    conditions TEXT,
+    fighting_techniques TEXT,
+    price NUMERIC
 );
 
 CREATE TABLE character_fight_skill (
-    id SERIAL PRIMARY KEY,
-    character_id INT REFERENCES character(id) ON DELETE CASCADE,
-    skill_id INT REFERENCES fight_skill(id) ON DELETE CASCADE
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    character_id BIGINT REFERENCES character(id) ON DELETE CASCADE,
+    skill_id BIGINT REFERENCES fight_skill (id) ON DELETE CASCADE
+);
+
+CREATE TABLE brawl_skill (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL,
+    rule TEXT,
+    conditions TEXT,
+    fighting_techniques TEXT,
+    price NUMERIC
+);
+
+CREATE TABLE character_brawl_skill (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    character_id BIGINT REFERENCES character(id) ON DELETE CASCADE,
+    skill_id BIGINT REFERENCES brawl_skill (id) ON DELETE CASCADE
+);
+
+CREATE TABLE magic_skill (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL,
+    rule TEXT,
+    conditions TEXT,
+    fighting_techniques TEXT,
+    price NUMERIC
+);
+
+CREATE TABLE magic_skill (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    character_id BIGINT REFERENCES character(id) ON DELETE CASCADE,
+    skill_id BIGINT REFERENCES magic_skill (id) ON DELETE CASCADE
 );
 
 CREATE TABLE role (
-    id SERIAL PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT
 );
