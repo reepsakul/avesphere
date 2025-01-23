@@ -4,7 +4,7 @@ Bro wth am I even doing here :skull:
 
 ### env
 
-`cp .env.dist .env.local` and write a password or sth
+`cp .env.dist .env` and write a password or sth
 
 ### Docker or sum
 
