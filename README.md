@@ -17,7 +17,7 @@ this creates two containers:
 
 ### Postgres or sum
 
-`docker exec -it db psql -U avesphere`
+`docker exec -it avesphere-db-1 psql -U avesphere`
 
 ### Remove docker volumes:
 
