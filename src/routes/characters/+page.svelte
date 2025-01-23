@@ -1,9 +1,18 @@
 <script>
 	// Fetch character data from your database or API
-	let characters = [
-		{ id: 1, name: 'Aella', race: 'Elf', profession: 'Warrior' },
-		{ id: 2, name: 'Brander', race: 'Human', profession: 'Mage' }
-	];
+	let characters = [];
+
+	async function loadCharacters() {
+		const response = await fetch('/api/characters');
+		if (response.ok) {
+			characters = await response.json();
+		} else {
+			console.error('Failed to fetch characters');
+		}
+	}
+
+	// Call the function to load the characters when the component is mounted
+	loadCharacters();
 </script>
 
 <h1>Characters</h1>

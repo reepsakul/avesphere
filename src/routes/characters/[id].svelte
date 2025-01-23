@@ -1,22 +1,18 @@
 <script context="module">
-	// Load character data based on the ID in the URL
-	export async function load({ params }) {
+	import { json } from '@sveltejs/kit';
+	import { db } from '$lib/database';
+
+	export async function GET({ params }): Promise<Response> {
 		const { id } = params;
-		const character = await fetch(`/api/characters/${id}`).then((res) => res.json());
-		return { props: { character } };
-	}
 
-	async function createCharacter(data) {
-		const response = await fetch('/api/characters', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(data)
-		});
-
-		if (response.ok) {
-			// Character created successfully
-		} else {
-			// Handle error
+		try {
+			const character = await db.query('SELECT * FROM characters WHERE id = $1', [id]);
+			if (character.rows.length === 0) {
+				return json({ error: 'Character not found' }, { status: 404 });
+			}
+			return json(character.rows[0], { status: 200 });
+		} catch (error) {
+			return json({ error: 'Failed to fetch character' }, { status: 500 });
 		}
 	}
 </script>
