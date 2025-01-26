@@ -24,4 +24,9 @@ Install pnpm using [corepack enable](https://github.com/nodejs/corepack/blob/mai
 The pnpm version is configured in `package.json`.
 
 # Running the Project
-Use `pnpm i` and `pnpm run dev` to deploy the dev server.
+Use
+```bash
+  pnpm i
+  pnpm run dev
+``` 
+to deploy the dev server.
