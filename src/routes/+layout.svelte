@@ -42,9 +42,7 @@
 		height: 100vh;
 		width: 200px;
 		border-right: 1px solid #a3a3a3;
-		color: white;
 		padding: 20px;
-		transition: width 0.3s ease-in-out;
 	}
 	.sidenav ul {
 		list-style: none;
@@ -55,17 +53,17 @@
 	}
 	.sidenav a {
 		text-decoration: none;
-		color: white;
+		color: #a3a3a3;
 		display: block;
 		padding: 8px 12px;
 		border-radius: 4px;
 		transition: background-color 0.2s;
 	}
 	.sidenav a:hover {
-		background-color: #555;
+		background-color: #e0e0e0;
 	}
 	.sidenav .active {
-		background-color: #555;
+		background-color: #ddd;
 		font-weight: bold;
 	}
 </style>
