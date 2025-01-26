@@ -8,7 +8,7 @@
 
 # Project Setup
 
-## fnm
+## Fnm
 This project makes use of [fnm](https://github.com/Schniz/fnm) to install Node.
 The Node version is configured in `.node-version`.
 Follow the [official installation instructions](https://github.com/Schniz/fnm/blob/master/README.md#installation).
@@ -19,7 +19,7 @@ Install the configured Node version by running
   fnm i 
 ```
 
-## pnpm
+## Pnpm
 Install pnpm using [corepack enable](https://github.com/nodejs/corepack/blob/main/README.md#default-installs).
 The pnpm version is configured in `package.json`.
 
