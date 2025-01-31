@@ -4,47 +4,29 @@
 
 	let { children } = $props();
 
-	let currentNavItem = 'home';
-	let navOpen = true;
+	let currentNavItem = $state('home');
 
 	function handleClick(item: string) {
 		currentNavItem = item;
-	}
-
-	function toggleNav() {
-		navOpen = !navOpen;
 	}
 </script>
 
 <div class="app-container">
 	<nav class="sidenav" transition:slide={{ duration: 200 }}>
-		{#if navOpen}
-			<ul>
-				<li class:active={currentNavItem === 'home'} on:click={() => handleClick('home')}>
-					<a href="/">Home</a>
-				</li>
-				<li
-					class:active={currentNavItem === 'characters'}
-					on:click={() => handleClick('characters')}
-				>
-					<a href="/characters">Characters</a>
-				</li>
-				<li class:active={currentNavItem === 'campaigns'} on:click={() => handleClick('campaigns')}>
-					<a href="/campaigns">Campaigns</a>
-				</li>
-			</ul>
-		{/if}
+		<ul>
+			<li class:active={currentNavItem === 'home'} on:click={() => handleClick('home')}>
+				<a href="/">Home</a>
+			</li>
+			<li class:active={currentNavItem === 'characters'} on:click={() => handleClick('characters')}>
+				<a href="/characters">Characters</a>
+			</li>
+			<li class:active={currentNavItem === 'campaigns'} on:click={() => handleClick('campaigns')}>
+				<a href="/campaigns">Campaigns</a>
+			</li>
+		</ul>
 	</nav>
 
 	<div class="app-container">
-		<button class="toggle-btn" on:click={toggleNav}>
-			{#if navOpen}
-				&laquo;
-			{:else}
-				&raquo;
-			{/if}
-		</button>
-
 		<main class="main-content">
 			{@render children()}
 		</main>
@@ -53,21 +35,14 @@
 
 <style>
 	.app-container {
+		width: 100%;
 		display: flex;
 	}
-	.toggle-btn {
-		background: none;
-		border: none;
-		font-size: 20px;
-		cursor: pointer;
-		margin-left: 10px;
-	}
 	.sidenav {
+		height: 100vh;
 		width: 200px;
-		background-color: #333;
-		color: white;
+		border-right: 1px solid #a3a3a3;
 		padding: 20px;
-		transition: width 0.3s ease-in-out;
 	}
 	.sidenav ul {
 		list-style: none;
@@ -78,27 +53,17 @@
 	}
 	.sidenav a {
 		text-decoration: none;
-		color: white;
+		color: #a3a3a3;
 		display: block;
 		padding: 8px 12px;
 		border-radius: 4px;
 		transition: background-color 0.2s;
 	}
 	.sidenav a:hover {
-		background-color: #555;
+		background-color: #e0e0e0;
 	}
 	.sidenav .active {
-		background-color: #555;
+		background-color: #ddd;
 		font-weight: bold;
-	}
-	.main-content {
-		padding: 20px;
-		flex-grow: 1;
-	}
-	.app-container.closed .sidenav {
-		width: 60px;
-	}
-	.app-container.closed .sidenav ul {
-		display: none;
 	}
 </style>

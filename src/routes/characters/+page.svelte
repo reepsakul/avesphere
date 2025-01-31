@@ -1,18 +1,9 @@
-<script>
-	// Fetch character data from your database or API
+<script lang="ts">
+	import type { PageProps } from './$types';
+
+	let { data }: PageProps = $props();
+
 	let characters = [];
-
-	async function loadCharacters() {
-		const response = await fetch('/api/characters');
-		if (response.ok) {
-			characters = await response.json();
-		} else {
-			console.error('Failed to fetch characters');
-		}
-	}
-
-	// Call the function to load the characters when the component is mounted
-	loadCharacters();
 </script>
 
 <h1>Characters</h1>

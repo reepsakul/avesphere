@@ -1,6 +1,5 @@
 <script context="module">
 	import { json } from '@sveltejs/kit';
-	import { db } from '$lib/database';
 
 	export async function GET({ params }): Promise<Response> {
 		const { id } = params;
