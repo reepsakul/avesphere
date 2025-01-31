@@ -6,7 +6,7 @@
 [![pnpm](https://img.shields.io/badge/10.0.0-gray?style=for-the-badge&logo=pnpm)](https://pnpm.io/)
 </div>
 
-# Project Setup
+# Project Development Setup
 
 ## Fnm
 This project makes use of [fnm](https://github.com/Schniz/fnm) to install Node.
@@ -23,10 +23,25 @@ Install the configured Node version by running
 Install pnpm using [corepack enable](https://github.com/nodejs/corepack/blob/main/README.md#default-installs).
 The pnpm version is configured in `package.json`.
 
-# Running the Project
+## Running the Project
 Use
 ```bash
   pnpm i
-  pnpm run dev
+  pnpm dev
 ``` 
 to deploy the dev server.
+
+# Project Deployment
+In order to build the final images, run
+```bash
+docker compose build
+```
+Now, any time you want to start the app, run
+```bash
+docker compose up
+```
+
+To stop the application completely (also closing the database and any unsaved changes) run
+```bash
+docker compose down -v
+```
