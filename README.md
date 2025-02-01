@@ -1,30 +1,47 @@
-# Setup
+<div align="center">
+<!-- INFO: The empty line is required for center to work.-->
 
-Bro wth am I even doing here :skull:
+[![Node](https://img.shields.io/badge/22.13.1-green?style=for-the-badge&logo=nodedotjs&logoColor=green&labelColor=grey)](https://nodejs.org/en)
+[![fnm](https://img.shields.io/badge/fnm-white?style=for-the-badge&logo=rocket)](https://github.com/Schniz/fnm)
+[![pnpm](https://img.shields.io/badge/10.0.0-gray?style=for-the-badge&logo=pnpm)](https://pnpm.io/)
+</div>
 
-### env
+# Project Development Setup
 
-`cp .env.dist .env` and write a password or sth
+## Fnm
+This project makes use of [fnm](https://github.com/Schniz/fnm) to install Node.
+The Node version is configured in `.node-version`.
+Follow the [official installation instructions](https://github.com/Schniz/fnm/blob/master/README.md#installation).
 
-### Docker or sum
+## Node
+Install the configured Node version by running
+```bash 
+  fnm i 
+```
 
-`docker compose up`
-this creates two containers:
+## Pnpm
+Install pnpm using [corepack enable](https://github.com/nodejs/corepack/blob/main/README.md#default-installs).
+The pnpm version is configured in `package.json`.
 
-- app where the app is in (astonishing)
-- db where the... yeah you get it
-  db is a named volume for reasons explained at the [bottom](#remove-docker-volumes)
+## Running the Project
+Use
+```bash
+  pnpm i
+  pnpm dev
+``` 
+to deploy the dev server.
 
-### Postgres or sum
+# Project Deployment
+In order to build the final images, run
+```bash
+docker compose build
+```
+Now, any time you want to start the app, run
+```bash
+docker compose up
+```
 
-`docker exec -it avesphere-db-1 psql -U avesphere`
-opens db terminal
-
-### Remove docker volumes:
-
-`docker compose down -v`
-
-`docker compose down` basically doesn't delete the explicitly named volumes
-this is intentional to not lose the db content (that's why only the db is named volume)
-this way we can mount several instances of that volume into different containers with content that is not in the image
-but yeah, if we wanna unmount completely with also deleting named volumes (only the db in our case) we have to use the `-v` flag effectively
+To stop the application completely (also closing the database and any unsaved changes) run
+```bash
+docker compose down -v
+```
