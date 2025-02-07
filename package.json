@@ -17,8 +17,10 @@
 		"@sveltejs/adapter-node": "^5.2.12",
 		"@sveltejs/kit": "^2.16.1",
 		"@sveltejs/vite-plugin-svelte": "^4.0.4",
+		"leaflet": "^1.9.4",
 		"pg": "^8.13.1",
 		"svelte": "^5.19.3",
+		"svelte-leaflet": "^0.2.0",
 		"tailwindcss": "^3.4.17",
 		"typescript": "^5.7.3",
 		"vite": "^5.4.14"
@@ -26,6 +28,7 @@
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
+		"@types/leaflet": "^1.9.16",
 		"autoprefixer": "^10.4.20",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
