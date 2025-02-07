@@ -50,7 +50,21 @@
 		L.control.watermark({ position: 'topright' }).addTo(map);
 
 		map.on('contextmenu', function (e) {
-			var marker = new L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+			// Prompt the user for a marker title
+			var title = prompt('Enter a title for the marker:');
+
+			// If the user provided a title, create the marker
+			if (title) {
+				var marker = new L.marker([e.latlng.lat, e.latlng.lng]).addTo(map).bindPopup(title);
+
+				marker.on('mouseover', function () {
+					this.openPopup();
+				});
+
+				marker.on('mouseout', function () {
+					this.closePopup();
+				});
+			}
 		});
 	});
 
