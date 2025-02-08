@@ -30,9 +30,13 @@
 			boundsPackage,
 			{
 				attribution:
-					'&copy; <a href="https://www.orkenspalter.de/filebase/index.php?file/46-aventurienkarte-aus-regionalpl%C3%A4nen/">Kartenpaket</a>'
+					'&copy; <a href="https://www.orkenspalter.de/filebase/index.php?file/46-aventurienkarte-aus-regionalpl%C3%A4nen/">Karte Fanprojekt</a>, <a href="https://de.wiki-aventurica.de/wiki/Kartenpaket/Lizenz">Ulisses Kartenpaket</a>'
 			}
 		);
+		var baseMaps = {
+			'Free v5': layerTDE5,
+			'Fan project v.1.2': layerFan
+		};
 
 		map = L.map(mapElement, {
 			crs: L.CRS.EPSG4326,
@@ -41,14 +45,18 @@
 			layers: [layerTDE5]
 		});
 
-		var baseMaps = {
-			'Free for v5': layerTDE5,
-			'Fan project v.1.2': layerFan
-		};
-
 		L.control.layers(baseMaps).addTo(map);
 
 		L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map);
+
+		// L.control.ruler({
+		//   position: 'topright',
+		//   lengthUnit: {
+		//     display: 'miles', // NOTE: miles in TDE are the same as km.
+		//     decimal: 3,
+		//     factor: null,
+		//     label: 'Distance:'
+		//   }}).addTo(map);
 
 		L.Control.Watermark = L.Control.extend({
 			onAdd: function () {
