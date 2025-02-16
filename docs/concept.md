@@ -44,10 +44,10 @@ When creating or editing a Character, I should have access to selections of abil
 As a user, I want to be able to share my characters and NPCs with other Users, for them to use. (With creator credited)
 
 
-# Class Diagram
-Based on this, we can more concisely think about classes necessary to implement these ideas.
+# System Architecture
+Based on this, we can more concisely think about classes and methods necessary to implement these ideas.
 
-![Classdiagram](resources/avesphere_class_diagram.drawio.svg)
+![SystemArchitecture](resources/avesphere_system_architecture.drawio.svg)
 
 # Tech Stack
 svelte-kit
