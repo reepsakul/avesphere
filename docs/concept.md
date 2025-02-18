@@ -54,12 +54,14 @@ svelte-kit
 
 Svelte
 
+Lucia: User authentication and management
+
 Node.js
 
 tailwindcss
 
 Docker
 
-Database: propose document db (i.e. the open source FerretDB), nice integration of characters as files, no impedance mismatch
+Database: propose document db for characters (i.e. the open source FerretDB), nice integration of characters as files, no impedance mismatch, sql or time series for events/Calendar, maybe multimodel -> surrealDB
 
 Map: leaflet.js due to popularity
