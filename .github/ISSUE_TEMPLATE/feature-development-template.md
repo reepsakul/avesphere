@@ -1,7 +1,7 @@
 ---
 name: Feature development template
 about: This template is to be used when starting development on a new feature.
-title: "[US-001] Create Character"
+title: "[US-X] Create Character"
 labels: enhancement
 assignees: ''
 
