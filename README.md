@@ -26,10 +26,18 @@ The pnpm version is configured in `package.json`.
 ## Running the Project
 Use
 ```bash
+docker compose up
+```
+and
+```bash
+docker compose down
+```
+to start and stop the database.
+To deploy the dev server, use
+```bash
   pnpm i
   pnpm dev
-``` 
-to deploy the dev server.
+```
 
 # Project Deployment
 In order to build the final images, run
@@ -38,10 +46,10 @@ docker compose build
 ```
 Now, any time you want to start the app, run
 ```bash
-docker compose up
+docker compose --profile production up
 ```
 
 To stop the application completely (also closing the database and any unsaved changes) run
 ```bash
-docker compose down -v
+docker compose down --profile production -v
 ```
