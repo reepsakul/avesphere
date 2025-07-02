@@ -54,7 +54,7 @@ svelte-kit
 
 Svelte
 
-Lucia: User authentication and management
+Lucia: use their guidelines for auth implementation
 
 Node.js
 
@@ -62,6 +62,21 @@ tailwindcss
 
 Docker
 
-Database: propose document db for characters (i.e. the open source FerretDB), nice integration of characters as files, no impedance mismatch, sql or time series for events/Calendar, maybe multimodel -> surrealDB
+Database: postgreSQL, with specifics depending on data type, i.e. binjson for characters, geojson for points, other for time data etc.
+
+TypeORM: for object handling with database
 
 Map: leaflet.js due to popularity
+
+# First version goals
+
+A small first running version will have the advantage of creating direct testing results and feedback.
+
+A first usable version (for game masters) is proposed with:
+
+* User creation/log in
+* Campaign and adventure creation
+* Note taking capability
+* Event calendar with in-game and real world timestamps
+* Media upload capability for images
+* Ability to hide notes, events or images
