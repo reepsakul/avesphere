@@ -5,73 +5,55 @@ import { UserSession } from './entities/UserSession';
 export class AuthenticationService {
 	private readonly sessionRepository: Repository<UserSession>;
 
-	private readonly monthInMilliseconds: number = 1000 * 60 * 60 * 24 * 30;
+	private readonly sessionDurationMs: number = 1000 * 60 * 60 * 24 * 7;
 
 	public constructor(private readonly db: DataSource) {
 		this.sessionRepository = db.getRepository(UserSession);
 	}
 
 	public async createSession(userId: UUID): Promise<UserSession> {
-		const session = new UserSession();
-		session.user_id = userId;
-		session.expires_at = new Date(Date.now() + this.monthInMilliseconds);
+		const session = new UserSession(userId, new Date(Date.now() + this.sessionDurationMs));
 
 		const saved_session = await this.sessionRepository.save(session);
-		console.info(
-			`UserSession ${saved_session.id} with user ${saved_session.user_id} has been saved.`
-		);
+		console.info(`${saved_session} has been saved.`);
 		return saved_session;
 	}
 
 	public async validateSession(sessionId: string): Promise<SessionValidationResult> {
-		const foundSession = await this.sessionRepository.findOneBy({
+		const foundSession: UserSession | null = await this.sessionRepository.findOneBy({
 			id: sessionId
 		});
 
 		if (foundSession === null) {
 			return { session: null };
 		}
-		const session: Session = {
-			id: foundSession.id,
-			userId: foundSession.user_id,
-			expiresAt: foundSession.expires_at
-		};
 
-		if (Date.now() >= session.expiresAt.getTime()) {
-			await this.sessionRepository.remove(foundSession)
+		if (Date.now() >= foundSession.expirationTime.getTime()) {
+			await this.sessionRepository.remove(foundSession);
+
 			return { session: null };
 		}
-		if (Date.now() >= session.expiresAt.getTime() - this.monthInMilliseconds / 2) {
-			foundSession.expires_at = new Date(Date.now() + this.monthInMilliseconds);
-      const saved_session = await this.sessionRepository.save(foundSession);
-      console.info(
-        `Expiration time of session ${saved_session.id} has been reset.`
-      );
-      return {session: saved_session};
+		if (Date.now() >= foundSession.expirationTime.getTime() - this.sessionDurationMs / 2) {
+			foundSession.expirationTime = new Date(Date.now() + this.sessionDurationMs);
+			const saved_session: UserSession | null = await this.sessionRepository.save(foundSession);
+
+			console.info(`Expiration time of UserSession ${saved_session} has been reset.`);
+
+			return { session: saved_session };
 		}
 		return { session: foundSession };
 	}
 
-	public static async invalidateSession(sessionId: string): Promise<void> {
-		// TODO: Remove a specific session from the database
-	}
+	public async invalidateSession(sessionId: string): Promise<void> {
+		const foundSession: UserSession | null = await this.sessionRepository.findOneBy({
+			id: sessionId
+		});
 
-	public static async invalidateAllSessions(userId: number): Promise<void> {
-		// TODO: Remove all sessions for a user
+		if (foundSession !== null) {
+			await this.sessionRepository.remove(foundSession);
+		}
 	}
 }
 
 // Type Definitions
-export type SessionValidationResult =
-	| { session: UserSession}
-	| { session: null};
-
-export interface Session {
-	id: string;
-	userId: string;
-	expiresAt: Date;
-}
-
-export interface User {
-	id: string;
-}
+export type SessionValidationResult = { session: UserSession } | { session: null };
