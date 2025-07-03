@@ -1,5 +1,5 @@
 import type { DataSource, Repository } from 'typeorm';
-import { UserSession } from './entities/UserSession';
+import { UserSession } from '../entities/UserSession';
 
 function generateSecureRandomString(): string {
 	// Human readable alphabet (a-z, 0-9 without l, o, 0, 1 to avoid confusion)
@@ -28,6 +28,7 @@ function constantTimeEqual(a: Uint8Array, b: Uint8Array): boolean {
 	}
 	return c === 0;
 }
+
 export class AuthenticationService {
 	private readonly sessionRepository: Repository<UserSession>;
 
