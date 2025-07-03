@@ -24,7 +24,7 @@ class TypeOrm {
 				password: process.env.POSTGRES_PASSWORD,
 				database: process.env.POSTGRES_DB_NAME,
 				synchronize: true,
-				entities: [UserCredentials, UserSession],
+				entities: ["entities/*.ts"],
 				migrations: [],
 				subscribers: [],
 				logging: true
