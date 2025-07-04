@@ -1,22 +1,25 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'user_session' })
 export class UserSession {
-	@PrimaryColumn({ type: 'varchar' })
+	@PrimaryGeneratedColumn('uuid')
 	id!: string;
 
 	@Column({ name: 'secret_hash', type: 'bytea', nullable: false })
-	secretHash!: Uint8Array;
+	secretHash!: Buffer;
 
-	@Column({ name: 'created_at', type: 'date', nullable: false })
+	@Column({ name: 'last_verified_at', type: 'timestamp', nullable: false })
+  lastVerifiedAt!: Date;
+
+	@Column({ name: 'created_at', type: 'timestamp', nullable: false })
 	createdAt!: Date;
 
-	public constructor(id: string, secretHash: Uint8Array, createdAt: Date) {
-		this.id = id;
+	public constructor(secretHash: Buffer, lastVerifiedAt: Date, createdAt: Date) {
 		this.secretHash = secretHash;
+    this.lastVerifiedAt = lastVerifiedAt;
 		this.createdAt = createdAt;
 	}
 	toString(): string {
-		return `UserSession { id: ${this.id}, secret_hash: ${this.secretHash}, created_at: ${this.createdAt.toISOString()} }`;
+		return `UserSession { id: ${this.id}, secret_hash: ${this.secretHash}, last_verified_at: ${this.lastVerifiedAt.toISOString()}, created_at: ${this.createdAt.toISOString()} }`;
 	}
 }
