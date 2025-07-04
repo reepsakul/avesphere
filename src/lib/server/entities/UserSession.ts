@@ -5,6 +5,9 @@ export class UserSession {
 	@PrimaryGeneratedColumn('uuid')
 	id!: string;
 
+  @Column({ name: 'user_id', type: 'uuid', nullable: false })
+  userId!: string;
+
 	@Column({ name: 'secret_hash', type: 'bytea', nullable: false })
 	secretHash!: Buffer;
 
@@ -14,7 +17,8 @@ export class UserSession {
 	@Column({ name: 'created_at', type: 'timestamp', nullable: false })
 	createdAt!: Date;
 
-	public constructor(secretHash: Buffer, lastVerifiedAt: Date, createdAt: Date) {
+	public constructor(userId: string, secretHash: Buffer, lastVerifiedAt: Date, createdAt: Date) {
+    this.userId = userId;
 		this.secretHash = secretHash;
     this.lastVerifiedAt = lastVerifiedAt;
 		this.createdAt = createdAt;

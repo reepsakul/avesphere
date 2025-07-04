@@ -5,6 +5,9 @@ export class UserCredentials {
 	@PrimaryGeneratedColumn('uuid')
 	id!: string;
 
-	@Column('text')
-	email!: string;
+	@Column({ name: 'username', type: 'text', nullable: false })
+	username!: string;
+
+	@Column({ name: 'password_hash', type: 'text', nullable: false })
+	passwordHash!: string;
 }
