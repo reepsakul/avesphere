@@ -6,6 +6,7 @@ services:
       dockerfile: app.Dockerfile
     ports:
       - '3000:3000'
+    profiles: [production]
 
   db:
     image: postgres:17-alpine # NOTE: Potentially move this to a separate `Dockerfile`.

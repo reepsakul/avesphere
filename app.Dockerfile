@@ -1,4 +1,4 @@
-FROM node:22.13.1-alpine3.21 AS builder
+FROM node:22.14.0-alpine3.20 AS builder
 WORKDIR /app
 RUN corepack enable
 COPY ./package*.json . 
@@ -7,7 +7,7 @@ COPY . /app/
 RUN pnpm build
 RUN pnpm prune --production
 
-FROM node:22.13.1-alpine3.21
+FROM node:22.14.0-alpine3.20
 WORKDIR /app
 COPY . /app/
 COPY --from=builder /app/build/ ./build/

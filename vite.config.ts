@@ -3,9 +3,12 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit()],
-  server: {
-    watch: {
-      usePolling: true
-    }
-  },
+	server: {
+		watch: {
+			usePolling: true
+		}
+	},
+	ssr: {
+		external: ['reflect-metadata']
+	}
 });
