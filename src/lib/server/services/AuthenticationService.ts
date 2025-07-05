@@ -1,6 +1,9 @@
 import { createHash, randomBytes, timingSafeEqual } from 'crypto';
 import type { DataSource, Repository } from 'typeorm';
 import { UserSession } from '../entities/UserSession';
+import type { RequestEvent } from '@sveltejs/kit';
+import type { UserCredentials } from '../entities/UserCredentials';
+import { UserService } from './UserService';
 
 export class AuthenticationService {
 	private readonly sessionRepository: Repository<UserSession>;
@@ -32,12 +35,12 @@ export class AuthenticationService {
       return new UserSessionWithToken(saved_session, token);
   }
 
-	public async validateSessionToken(token: string): Promise<UserSession | null> {
+	public async validateSessionToken(token: string): Promise<SessionValidationResult> {
     const now = new Date();
 
 		const tokenParts = token.split('.');
 		if (tokenParts.length != 2) {
-			return null;
+			return { session: null, user: null };
 		}
 		const sessionId = tokenParts[0];
 		const sessionSecret = tokenParts[1];
@@ -46,7 +49,7 @@ export class AuthenticationService {
 
 		if (session === null) {
       console.warn(`Session with ID ${sessionId} not found.`);
-			return null;
+			return { session: null, user: null };
 		}
 
 		const tokenSecretHash = await this.hashSecret(sessionSecret);
@@ -54,7 +57,7 @@ export class AuthenticationService {
 
 		if (!validSecret) {
       console.warn(`Invalid session secret for session ${sessionId}.`);
-			return null;
+			return { session: null, user: null };
 		}
 
     if (now.getTime() - session.lastVerifiedAt.getTime() >= this.activityCheckIntervalMs) {
@@ -63,7 +66,15 @@ export class AuthenticationService {
 			console.info(`Verification time of UserSession with ID ${sessionId} has been updated.`);
     }
 
-		return session;
+    const userService = new UserService(this.db);
+    const user: UserCredentials | null = await userService.getUserById(session.userId);
+    
+    if (user === null) {
+      console.warn(`User with ID ${session.userId} not found.`);
+      return { session: null, user: null };
+    }
+
+		return {session, user};
 	}
 
 	public async getSession(sessionId: string): Promise<UserSession | null> {
@@ -99,7 +110,25 @@ export class AuthenticationService {
 		}
 	}
   
+  public async setSessionTokenCookie(event: RequestEvent, token: string): Promise<void> {
+    event.cookies.set("session", token, {
+      httpOnly: true,
+      path: "/",
+      secure: import.meta.env.PROD,
+      sameSite: "lax",
+      expires: new Date(Date.now() + this.inactivityTimeoutMs)
+    });
+  }
 
+  public async deleteSessionTokenCookie(event: RequestEvent): Promise<void> {
+    event.cookies.set("session", "", {
+      httpOnly: true,
+      path: "/",
+      secure: import.meta.env.PROD,
+      sameSite: "lax",
+      maxAge: 0
+    });
+  }
 
 
 }
@@ -119,3 +148,6 @@ export class UserSessionWithToken extends UserSession {
 		this.token = token; // NOTE: is not persisted in the database
 	}
 }
+
+// Type Definitions
+export type SessionValidationResult = { session: UserSession; user: UserCredentials } | { session: null; user: null };

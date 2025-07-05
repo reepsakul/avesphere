@@ -50,6 +50,15 @@ export class UserService {
     return user;
   }
 
+  public async getUserById(userId: string): Promise<UserCredentials | null> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (user === null) {
+      console.warn(`User with ID ${userId} not found.`);
+      return null;
+    }
+    return user;
+  }
+
   public async changePassword(username: string, newPassword: string): Promise<UserCredentials | null> {
     const user = await this.getUserByUsername(username);
     if (user === null) {
@@ -89,7 +98,7 @@ export class UserService {
     }
 
     const authService = new AuthenticationService(this.db);
-    
+
     const sessionWithToken = await authService.createSession(user.id);
     console.info(`User ${username} authenticated successfully.`);
 
