@@ -3,7 +3,6 @@ import type { DataSource, Repository } from 'typeorm';
 import { UserCredentials } from '../entities/UserCredentials';
 import { AuthenticationService, UserSessionWithToken } from './AuthenticationService';
 
-
 export class UserService {
 	private readonly userRepository: Repository<UserCredentials>;
 
@@ -16,8 +15,8 @@ export class UserService {
 		newUser.username = username;
 		newUser.passwordHash = await this.hashPassword(password);
 
-      const saved_user = await this.userRepository.save(newUser);
-      console.info(`User with ${saved_user} has been saved.`);
+		const saved_user = await this.userRepository.save(newUser);
+		console.info(`User with ${saved_user} has been saved.`);
 
 		return newUser;
 	}
@@ -41,67 +40,86 @@ export class UserService {
 		return true;
 	}
 
-  public async getUserByUsername(username: string): Promise<UserCredentials | null> {
-    const user = await this.userRepository.findOneBy({ username: username });
-    if (user === null) {
-      console.warn(`User with username ${username} not found.`);
-      return null;
-    }
-    return user;
-  }
+	public verifyUsernameInput(username: string): boolean {
+		return username.length > 3 && username.length < 32 && username.trim() === username;
+	}
 
-  public async getUserById(userId: string): Promise<UserCredentials | null> {
-    const user = await this.userRepository.findOneBy({ id: userId });
-    if (user === null) {
-      console.warn(`User with ID ${userId} not found.`);
-      return null;
-    }
-    return user;
-  }
+	public async getUserByUsername(username: string): Promise<UserCredentials | null> {
+		const user = await this.userRepository.findOneBy({ username: username });
+		if (user === null) {
+			console.warn(`User with username ${username} not found.`);
+			return null;
+		}
+		return user;
+	}
 
-  public async changePassword(username: string, newPassword: string): Promise<UserCredentials | null> {
-    const user = await this.getUserByUsername(username);
-    if (user === null) {
-      console.warn(`User with username ${username} not found.`);
-      return null;
-    }
+	public async getUserById(userId: string): Promise<UserCredentials | null> {
+		const user = await this.userRepository.findOneBy({ id: userId });
+		if (user === null) {
+			console.warn(`User with ID ${userId} not found.`);
+			return null;
+		}
+		return user;
+	}
 
-    user.passwordHash = await this.hashPassword(newPassword);
-    const updatedUser = await this.userRepository.save(user);
-    console.info(`Password for user ${username} has been updated.`);
-    
-    return updatedUser;
-  }
+	public async getUserPasswordHash(userId: string): Promise<string | null> {
+		const user = await this.getUserById(userId);
+		if (user === null) {
+			console.warn(`User with ID ${userId} not found.`);
+			return null;
+		}
+		return user.passwordHash;
+	}
 
-  public async deleteUser(username: string): Promise<void> {
-    const user = await this.getUserByUsername(username);
-    if (user === null) {
-      console.warn(`User with username ${username} not found.`);
-      return;
-    }
+	public async changePassword(
+		username: string,
+		newPassword: string
+	): Promise<UserCredentials | null> {
+		const user = await this.getUserByUsername(username);
+		if (user === null) {
+			console.warn(`User with username ${username} not found.`);
+			return null;
+		}
 
-    await this.userRepository.remove(user);
-    console.info(`User with username ${username} has been deleted.`);
-  }
+		user.passwordHash = await this.hashPassword(newPassword);
+		const updatedUser = await this.userRepository.save(user);
+		console.info(`Password for user ${username} has been updated.`);
 
-  public async authenticateUser(username: string, password: string): Promise<UserSessionWithToken | null> {
-    const user = await this.getUserByUsername(username);
-    if (user === null) {
-      console.warn(`Authentication failed: User with username ${username} not found.`);
-      return null;
-    }
+		return updatedUser;
+	}
 
-    const isPasswordValid = await this.verifyPasswordHash(user.passwordHash, password);
-    if (!isPasswordValid) {
-      console.warn(`Authentication failed: Invalid password for user ${username}.`);
-      return null;
-    }
+	public async deleteUser(username: string): Promise<void> {
+		const user = await this.getUserByUsername(username);
+		if (user === null) {
+			console.warn(`User with username ${username} not found.`);
+			return;
+		}
 
-    const authService = new AuthenticationService(this.db);
+		await this.userRepository.remove(user);
+		console.info(`User with username ${username} has been deleted.`);
+	}
 
-    const sessionWithToken = await authService.createSession(user.id);
-    console.info(`User ${username} authenticated successfully.`);
+	public async authenticateUser(
+		username: string,
+		password: string
+	): Promise<UserSessionWithToken | null> {
+		const user = await this.getUserByUsername(username);
+		if (user === null) {
+			console.warn(`Authentication failed: User with username ${username} not found.`);
+			return null;
+		}
 
-    return sessionWithToken
-  }
+		const isPasswordValid = await this.verifyPasswordHash(user.passwordHash, password);
+		if (!isPasswordValid) {
+			console.warn(`Authentication failed: Invalid password for user ${username}.`);
+			return null;
+		}
+
+		const authService = new AuthenticationService(this.db);
+
+		const sessionWithToken = await authService.createSession(user.id);
+		console.info(`User ${username} authenticated successfully.`);
+
+		return sessionWithToken;
+	}
 }

@@ -1,26 +1,30 @@
 import TypeOrm from '$lib/server/db';
 import { AuthenticationService } from '$lib/server/services/AuthenticationService';
-import { UserService } from '$lib/server/services/UserService';
+import { fail, redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoadEvent, RequestEvent } from './$types';
 
-var userService = new UserService(await TypeOrm.getDb());
-var authService = new AuthenticationService(await TypeOrm.getDb());
-
-const username = 'testuser';
-const password = 'testpassword';
-
-// Create a new user
-await userService.createUser(username, password);
-
-// Authenticate the user
-const session = await userService.authenticateUser(username, password);
-
-// wait for 5 seconds
-await new Promise(resolve => setTimeout(resolve, 5000));
-
-if (session != null) {
-  authService.validateSessionToken(session.token)
-  const sessionData = await authService.getSession(session.id);
-  console.log(sessionData);
+export function load(event: PageServerLoadEvent) {
+	if (event.locals.session === null || event.locals.user === null) {
+		redirect(302, '/login');
+	}
+	return {
+		user: event.locals.user
+	};
 }
 
+export const actions: Actions = {
+	default: action
+};
 
+async function action(event: RequestEvent) {
+	if (!event.locals.session) {
+		return fail(401, {
+			message: 'Not authenticated'
+		});
+	}
+	const authService = new AuthenticationService(await TypeOrm.getDb());
+
+	await authService.invalidateSession(event.locals.session.id);
+	await authService.deleteSessionTokenCookie(event);
+	redirect(302, '/login');
+}
